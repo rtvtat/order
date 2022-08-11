@@ -12,42 +12,70 @@ public class TestOrder {
     @Test
     public void testOrderCorrectNameAndPhone() {
         open("http://localhost:9999");
-        $("span[data-test-id='name'] span span input[name='name']").setValue("Ивановаа Татьяна");
-        $("span[data-test-id='phone'] span span input[name='phone']").setValue("+79278886677");
+        $("span[data-test-id='name'] input[name='name']").setValue("Ивановаа Татьяна");
+        $("span[data-test-id='phone'] input[name='phone']").setValue("+79278886677");
         $("label[data-test-id='agreement']").click();
         $("button").click();
-        $("p[data-test-id='order-success']").shouldHave(Condition.exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время."));
+        $("p[data-test-id='order-success']").shouldHave(
+                Condition.exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.")
+        );
     }
 
     @Test
     public void testOrderNameWithHyphen() {
         open("http://localhost:9999");
-        $("span[data-test-id='name'] span span input[name='name']").setValue("Ивановаа-Сидорова Галина");
-        $("span[data-test-id='phone'] span span input[name='phone']").setValue("+79278886677");
+        $("span[data-test-id='name'] input[name='name']").setValue("Ивановаа-Сидорова Галина");
+        $("span[data-test-id='phone'] input[name='phone']").setValue("+79278886677");
         $("label[data-test-id='agreement']").click();
         $("button").click();
-        $("p[data-test-id='order-success']").shouldHave(Condition.exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время."));
+        $("p[data-test-id='order-success']").shouldHave(
+                Condition.exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.")
+        );
+    }
+
+    @Test
+    public void testOrderithEmptyName() {
+        open("http://localhost:9999");
+        $("span[data-test-id='name'] input[name='name']").setValue("Ивановаа-Сидорова Галина");
+        $("span[data-test-id='phone'] input[name='phone']").setValue("");
+        $("label[data-test-id='agreement']").click();
+        $("button").click();
+        $(".input_invalid[data-test-id='phone'] .input__sub").shouldHave(
+                Condition.exactText("Поле обязательно для заполнения")
+        );
+    }
+
+    @Test
+    public void testOrderithEmptyPhone() {
+        open("http://localhost:9999");
+        $("span[data-test-id='name'] input[name='name']").setValue("");
+        $("span[data-test-id='phone'] input[name='phone']").setValue("+79278886677");
+        $("label[data-test-id='agreement']").click();
+        $("button").click();
+        $(".input_invalid[data-test-id='name'] .input__sub").shouldHave(
+                Condition.exactText("Поле обязательно для заполнения")
+        );
     }
 
     @Test
     public void testOrderithIncorrectPhone() {
         open("http://localhost:9999");
-        $("span[data-test-id='name'] span span input[name='name']").setValue("Ивановаа-Сидорова Галина");
-        $("span[data-test-id='phone'] span span input[name='phone']").setValue("79278886677");
+        $("span[data-test-id='name'] input[name='name']").setValue("Ивановаа-Сидорова Галина");
+        $("span[data-test-id='phone'] input[name='phone']").setValue("79278886677");
         $("label[data-test-id='agreement']").click();
         $("button").click();
-        $("span[data-test-id='phone'] span span[class='input__sub']").shouldHave(
+        $(".input_invalid[data-test-id='phone'] .input__sub").shouldHave(
                 Condition.exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
     }
 
     @Test
     public void testOrderithIncorrectName() {
         open("http://localhost:9999");
-        $("span[data-test-id='name'] span span input[name='name']").setValue("Ivanova");
-        $("span[data-test-id='phone'] span span input[name='phone']").setValue("+79278886677");
+        $("span[data-test-id='name'] input[name='name']").setValue("Ivanova");
+        $("span[data-test-id='phone'] input[name='phone']").setValue("+79278886677");
         $("label[data-test-id='agreement']").click();
         $("button").click();
-        $("span[data-test-id='name'] span span[class='input__sub']").shouldHave(
+        $(".input_invalid[data-test-id='name'] .input__sub").shouldHave(
                 Condition.exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
     }
 }
