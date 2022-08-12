@@ -78,4 +78,13 @@ public class TestOrder {
         $(".input_invalid[data-test-id='name'] .input__sub").shouldHave(
                 Condition.exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
     }
+
+    @Test
+    public void testOrderWithEmptyAgreement() {
+        open("http://localhost:9999");
+        $("span[data-test-id='name'] input[name='name']").setValue("Ивановаа-Сидорова Галина");
+        $("span[data-test-id='phone'] input[name='phone']").setValue("+79278886677");
+        $("button").click();
+        $(".input_invalid[data-test-id='agreement']").shouldHave(Condition.exist);
+    }
 }
